@@ -1,5 +1,5 @@
 {
-    "name": "yoya/bit",
+    "name": "yoya/io_bit",
     "type": "library",
     "description": "Bit I/O library",
     "keywords": ["binary"],
