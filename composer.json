@@ -4,7 +4,6 @@
     "description": "Bit I/O library",
     "keywords": ["binary"],
     "homepage": "http://pwiki.awm.jp/~yoya/?IO_Bit",
-    "version": "2.1.1",
     "license": "MIT",
     "authors": [
         {
@@ -16,6 +15,6 @@
         "php": ">=5.1.0"
     },
     "autoload": {
-        "psr-0": { "IO\\Bit": "src/" }
+        "psr-0": { "IO_Bit": "." }
     }
 }
