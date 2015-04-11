@@ -10,9 +10,9 @@ class IO_Bit {
     /*
      * instance variable
      */
-    var $_data;
-    var $_byte_offset;
-    var $_bit_offset;
+    var $_data = '';
+    var $_byte_offset = 0;
+    var $_bit_offset = 0;
 
     /*
      * data i/o method
