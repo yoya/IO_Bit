@@ -204,7 +204,21 @@ class IO_Bit {
 	}
         return $value;
     }
-    
+
+    // Binary-coded decimal
+    function getUIBCD8() {
+        $this->byteAlign();
+        if (strlen($this->_data) < $this->_byte_offset + 1) {
+            $data_len = strlen($this->_data);
+            $offset = $this->_byte_offset;
+            throw new IO_Bit_Exception("getBCD8: $data_len < $offset + 1");
+        }
+        $value = ord($this->_data{$this->_byte_offset});
+        $value = ($value >> 4 )* 10 + ($value & 0x0f);
+        $this->_byte_offset += 1;
+        return $value;
+    }
+
     // start with the MSB(most-significant bit)
     function getUIBit() {
         $byte_offset = $this->_byte_offset;
@@ -355,6 +369,17 @@ class IO_Bit {
         if ($data_len < $need_data_len) {
             $this->_data .= str_pad(chr(0), $need_data_len - $data_len);
         }
+        return true;
+    }
+
+    // Binary-coded decimal
+    function putUIBCD8($value) {
+        $this->byteAlign();
+        $value1 = $value % 10;
+        $value2 = ($value - $value1)/10;
+        $value = ($value2 << 4) + $value1;
+        $this->_data .= chr($value);
+        $this->_byte_offset += 1;
         return true;
     }
 
