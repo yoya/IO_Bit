@@ -140,7 +140,21 @@ class IO_Bit {
         $this->_byte_offset += 2;
         return $ret[1];
     }
+    function getSI16BE() {
+        $value = $this->getUI16BE();
+        if ($value < 0x8000) {
+            return $value;
+        }
+        return $value - 0x10000; // 2-negative
+    }
     function getUI32BE() {
+        $value = $this->getSI32BE(); // PHP bugs
+        if ($value < 0) {
+            $value += 4294967296;
+        }
+        return $value;
+    }
+    function getSI32BE() {
         $this->byteAlign();
         if (strlen($this->_data) < $this->_byte_offset + 4) {
             $data_len = strlen($this->_data);
@@ -150,11 +164,10 @@ class IO_Bit {
         $ret = unpack('N', substr($this->_data, $this->_byte_offset, 4));
         $this->_byte_offset += 4;
         $value = $ret[1];
-        if ($value < 0) { // php bugs
-            $value += 4294967296;
-        }
         return $value;
     }
+
+
     function getUI16LE() {
         $this->byteAlign();
         if (strlen($this->_data) < $this->_byte_offset + 2) {
