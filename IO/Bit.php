@@ -347,10 +347,20 @@ class IO_Bit {
         $this->_byte_offset += 2;
         return true;
     }
+    function putSI16BE($value) {
+        if ($value < 0) {
+            $value = $value + 0x10000; // 2-negative reverse
+        }
+        return $this->putUI16BE($value);
+    }
     function putUI32BE($value) {
         $this->byteAlign();
         $this->_data .= pack('N', $value);
         $this->_byte_offset += 4;
+        return true;
+    }
+    function putSI32BE($value) {
+        return $this->putUI32BE($value); // XXX
         return true;
     }
     function putUI16LE($value) {
