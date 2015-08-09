@@ -147,14 +147,7 @@ class IO_Bit {
         }
         return $value - 0x10000; // 2-negative
     }
-    function getUI32BE() {
-        $value = $this->getSI32BE(); // PHP bugs
-        if ($value < 0) {
-            $value += 4294967296;
-        }
-        return $value;
-    }
-    function getSI32BE() {
+    function _getUI32BE() {
         $this->byteAlign();
         if (strlen($this->_data) < $this->_byte_offset + 4) {
             $data_len = strlen($this->_data);
@@ -165,6 +158,31 @@ class IO_Bit {
         $this->_byte_offset += 4;
         $value = $ret[1];
         return $value;
+    }
+
+    function getUI32BE() {
+        if (PHP_INT_SIZE > 4) {
+            // 64bit PHP
+            return $this->_getUI32BE();
+        }
+        // 32bit PHP bugs
+        $value = $this->_getUI32BE();
+        if ($value < 0) {
+            return $value + 4294967296;
+        }
+        return $value;
+    }
+    function getSI32BE() {
+        if (PHP_INT_SIZE > 4) {
+            // 64bit PHP
+            $value = $this->_getUI32BE();
+            if ($value < 0x80000000) {
+                return $value;
+            } 
+            return $value - 0x100000000; // 2-negative
+        }
+        // 32bit PHP bugs
+        return $this->_getUI32BE();
     }
 
 
@@ -186,14 +204,7 @@ class IO_Bit {
         }
         return $value - 0x10000; // 2-negative
     }
-    function getUI32LE() {
-        $value = $this->getSI32LE(); // PHP bugs
-        if ($value < 0) {
-            $value += 4294967296;
-        }
-        return $value;
-    }
-    function getSI32LE() {
+    function _getUI32LE() {
         $this->byteAlign();
         if (strlen($this->_data) < $this->_byte_offset + 4) {
             $data_len = strlen($this->_data);
@@ -204,6 +215,30 @@ class IO_Bit {
         $this->_byte_offset += 4;
         $value = $ret[1];
         return $value; // PHP bug
+    }
+    function getUI32LE() {
+        if (PHP_INT_SIZE > 4) {
+            // 64bit PHP
+            return $this->_getUI32LE();
+        }
+        // 32bit PHP bugs
+        $value = $this->_getUI32LE();
+        if ($value < 0) {
+            return $value + 4294967296;
+        }
+        return $value;
+    }
+    function getSI32LE() {
+        if (PHP_INT_SIZE > 4) {
+            // 64bit PHP
+            $value = $this->_getUI32LE();
+            if ($value < 0x80000000) {
+                return $value;
+            } 
+            return $value - 0x100000000; // 2-negative
+        }
+        // 32bit PHP bugs
+        return $this->_getUI32LE();
     }
     function getUI64LE() {
         $value = $this->getUI32LE();
