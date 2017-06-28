@@ -296,6 +296,9 @@ class IO_Bit {
         return $value;
     }
     function getSIBits($width) {
+        if ($width <= 0) {
+            return 0;
+        }
         $value = $this->getUIBits($width);
         $msb = $value & (1 << ($width - 1));
         if ($msb) {
