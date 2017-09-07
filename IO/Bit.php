@@ -516,7 +516,7 @@ class IO_Bit {
      * set method
      */
     function setUI8($value, $byte_offset) {
-        $this->_data{$byte_offset + 0} = chr($data);
+        $this->_data{$byte_offset} = chr($value);
         return true;
     }
     function setUI16BE($value, $byte_offset) {
