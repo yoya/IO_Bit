@@ -547,6 +547,24 @@ class IO_Bit {
         $this->_data{$byte_offset + 3} = $data{3};
         return true;
     }
+    function setUIBit($bit, $byte_offset, $bit_offset) {
+        $value = ord($this->_data{$byte_offset});
+        $value |= 1 << (7 - $bit_offset);  // MSB(Bit) first
+        $this->_data{$byte_offset} = chr($value);
+        return true;
+    }
+    function setUIBits($value, $width, $byte_offset, $bit_offset) {
+        for ($i = 0 ; $i < $width ; $i++) {
+            if (8 <= $bit_offset) {
+                $byte_offset ++;
+                $bit_offset -= 8;
+            }
+            $bit = 1 & ($value >> (7 - $bit_offset)); // MSB(Bit) first
+            $this->setUIBit($bit, $byte_offset, $bit_offset);
+            $bit_offset++;
+        }
+        return true;
+    }
     /*
      * need bits
      */
