@@ -460,7 +460,7 @@ class IO_Bit {
         return true;
     }
     function putUIBits($value, $width) {
-        while ($width--) {
+        while (0 < $width--) {
             $bit = ($value >> $width) & 1;
             $ret = $this->putUIBit($bit);
             if ($ret !== true) {
