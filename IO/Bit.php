@@ -351,20 +351,16 @@ class IO_Bit {
      */
     function putData($data, $data_len = null, $pad_string = "\0") {
         $this->byteAlign();
-        if (is_null($data_len)) {
-            $this->_data .= $data;
-            $this->_byte_offset += strlen($data);
-        } else {
+        if (! is_null($data_len)) {
             $len = strlen($data);
-            if ($len === $data_len) {
-                $this->_data .= $data;
-            } elseif ($len < $data_len) {
-                $this->_data .= str_pad($data, $data_len, $pad_string);
+            if ($len < $data_len) {
+                $data = str_pad($data, $data_len, $pad_string);
             } else {
-                $this->_data .= substr($data, 0, $data_len);
+                $data = substr($data, 0, $data_len);
             }
-            $this->_byte_offset += $data_len;
         }
+        $this->_data .= $data;
+        $this->_byte_offset += strlen($data);
         return true;
     }
     function putUI8($value) {
