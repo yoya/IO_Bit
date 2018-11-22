@@ -511,6 +511,21 @@ class IO_Bit {
     /*
      * set method
      */
+    function setData($data, $byte_offset, $data_len = null, $pad_string = "\0") {
+        if (! is_null($data_len)) {
+            $len = strlen($data);
+            if ($len < $data_len) {
+                $data = str_pad($data, $data_len, $pad_string);
+            } else {
+                $data = substr($data, 0, $data_len);
+            }
+        }
+        $data_len = strlen($data);
+        for ($i = 0 ; $i < $data_len; $i++) {
+            $this->_data{$byte_offset + $i} = $data[$i];
+        }
+        return true;
+    }
     function setUI8($value, $byte_offset) {
         $this->_data{$byte_offset} = chr($value);
         return true;
