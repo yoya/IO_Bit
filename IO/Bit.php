@@ -184,6 +184,18 @@ class IO_Bit {
         // 32bit PHP bugs
         return $this->_getUI32BE();
     }
+    function getUI64BE() {
+        $value = $this->getUI32LE();
+        $value = $value + 0x100000000 * $this->getUI32BE();
+        return $value;
+    }
+    function getSI64BE() {
+        $value = $this->getUI64LE();
+        if ($value >= 0x8000000000000000) {
+            $value = 0x7fffffffffffffff - $value;
+        }
+        return $value;
+    }
 
 
     function getUI16LE() {
