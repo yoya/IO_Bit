@@ -186,7 +186,7 @@ class IO_Bit {
     }
     function getUI64BE() {
         $value = $this->getUI32LE();
-        $value = $value + 0x100000000 * $this->getUI32BE();
+        $value = $value * 0x100000000 + $this->getUI32BE();
         return $value;
     }
     function getSI64BE() {
