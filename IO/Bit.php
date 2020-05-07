@@ -118,7 +118,7 @@ class IO_Bit {
             $offset = $this->_byte_offset;
             throw new IO_Bit_Exception("getUI8: $data_len < $offset + 1");
         }
-        $value = ord($this->_data{$this->_byte_offset});
+        $value = ord($this->_data[$this->_byte_offset]);
         $this->_byte_offset += 1;
         return $value;
     }
@@ -273,7 +273,7 @@ class IO_Bit {
             $offset = $this->_byte_offset;
             throw new IO_Bit_Exception("getBCD8: $data_len < $offset + 1");
         }
-        $value = ord($this->_data{$this->_byte_offset});
+        $value = ord($this->_data[$this->_byte_offset]);
         $value = ($value >> 4 )* 10 + ($value & 0x0f);
         $this->_byte_offset += 1;
         return $value;
@@ -287,7 +287,7 @@ class IO_Bit {
         if ($data_len <= $byte_offset) {
             throw new IO_Bit_Exception("getUIBit: $data_len <= $byte_offset");
         }
-        $value = ord($this->_data{$byte_offset});
+        $value = ord($this->_data[$byte_offset]);
         $value = 1 & ($value >> (7 - $bit_offset)); // MSB(Bit) first
         $bit_offset ++;
         if ($bit_offset < 8) {
@@ -328,7 +328,7 @@ class IO_Bit {
         if ($data_len <= $byte_offset) {
             throw new IO_Bit_Exception("getUIBitLSB: $data_len <= $byte_offset");
         }
-        $value = ord($this->_data{$byte_offset});
+        $value = ord($this->_data[$byte_offset]);
         $value = 1 & ($value >> $bit_offset); // LSB(Bit) first
         $bit_offset ++;
         if ($bit_offset < 8) {
@@ -456,9 +456,9 @@ class IO_Bit {
     function putUIBit($bit) {
         $this->_allocData($this->_byte_offset + 1);
         if ($bit > 0) {
-            $value = ord($this->_data{$this->_byte_offset});
+            $value = ord($this->_data[$this->_byte_offset]);
             $value |= 1 << (7 - $this->_bit_offset);  // MSB(Bit) first
-            $this->_data{$this->_byte_offset} = chr($value);
+            $this->_data[$this->_byte_offset] = chr($value);
         }
         $this->_bit_offset += 1;
         if (8 <= $this->_bit_offset) {
@@ -490,9 +490,9 @@ class IO_Bit {
     function putUIBitLSB($bit) {
         $this->_allocData($this->_byte_offset + 1);
         if ($bit > 0) {
-            $value = ord($this->_data{$this->_byte_offset});
+            $value = ord($this->_data[$this->_byte_offset]);
             $value |= 1 << $this->_bit_offset;  // LSB(Bit) first
-            $this->_data{$this->_byte_offset} = chr($value);
+            $this->_data[$this->_byte_offset] = chr($value);
         }
         $this->_bit_offset += 1;
         if (8 <= $this->_bit_offset) {
@@ -534,46 +534,46 @@ class IO_Bit {
         }
         $data_len = strlen($data);
         for ($i = 0 ; $i < $data_len; $i++) {
-            $this->_data{$byte_offset + $i} = $data[$i];
+            $this->_data[$byte_offset + $i] = $data[$i];
         }
         return true;
     }
     function setUI8($value, $byte_offset) {
-        $this->_data{$byte_offset} = chr($value);
+        $this->_data[$byte_offset] = chr($value);
         return true;
     }
     function setUI16BE($value, $byte_offset) {
         $data = pack('n', $value);
-        $this->_data{$byte_offset + 0} = $data{0};
-        $this->_data{$byte_offset + 1} = $data{1};
+        $this->_data[$byte_offset + 0] = $data[0];
+        $this->_data[$byte_offset + 1] = $data[1];
         return true;
     }
     function setUI32BE($value, $byte_offset) {
         $data = pack('N', $value);
-        $this->_data{$byte_offset + 0} = $data{0};
-        $this->_data{$byte_offset + 1} = $data{1};
-        $this->_data{$byte_offset + 2} = $data{2};
-        $this->_data{$byte_offset + 3} = $data{3};
+        $this->_data[$byte_offset + 0] = $data[0];
+        $this->_data[$byte_offset + 1] = $data[1];
+        $this->_data[$byte_offset + 2] = $data[2];
+        $this->_data[$byte_offset + 3] = $data[3];
         return true;
     }
     function setUI16LE($value, $byte_offset) {
         $data = pack('v', $value);
-        $this->_data{$byte_offset + 0} = $data{0};
-        $this->_data{$byte_offset + 1} = $data{1};
+        $this->_data[$byte_offset + 0] = $data[0];
+        $this->_data[$byte_offset + 1] = $data[1];
         return true;
     }
     function setUI32LE($value, $byte_offset) {
         $data = pack('V', $value);
-        $this->_data{$byte_offset + 0} = $data{0};
-        $this->_data{$byte_offset + 1} = $data{1};
-        $this->_data{$byte_offset + 2} = $data{2};
-        $this->_data{$byte_offset + 3} = $data{3};
+        $this->_data[$byte_offset + 0] = $data[0];
+        $this->_data[$byte_offset + 1] = $data[1];
+        $this->_data[$byte_offset + 2] = $data[2];
+        $this->_data[$byte_offset + 3] = $data[3];
         return true;
     }
     function setUIBit($bit, $byte_offset, $bit_offset) {
-        $value = ord($this->_data{$byte_offset});
+        $value = ord($this->_data[$byte_offset]);
         $value |= 1 << (7 - $bit_offset);  // MSB(Bit) first
-        $this->_data{$byte_offset} = chr($value);
+        $this->_data[$byte_offset] = chr($value);
         return true;
     }
     function setUIBits($value, $width, $byte_offset, $bit_offset) {
@@ -642,7 +642,7 @@ class IO_Bit {
                 echo(' ');
             }
             if ($i < strlen($this->_data)) {
-                $chr = $this->_data{$i};
+                $chr = $this->_data[$i];
                 $value = ord($chr);
                 if ((0x20 < $value) && ($value < 0x7f)) { // XXX: printable
                     $dump_str .= $chr;
