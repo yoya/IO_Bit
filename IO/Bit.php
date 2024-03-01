@@ -259,9 +259,9 @@ class IO_Bit {
     }
     function getSI64LE() {
         $value = $this->getUI64LE();
-	if ($value >= 0x8000000000000000) {
-	  $value = 0x7fffffffffffffff - $value;
-	}
+        if ($value >= 0x8000000000000000) {
+            $value = 0x7fffffffffffffff - $value;
+        }
         return $value;
     }
 
