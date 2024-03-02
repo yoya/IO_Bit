@@ -129,6 +129,9 @@ class IO_Bit {
         }
         return $value - 0x100; // 2-negative
     }
+    /*
+     * Big Endian
+     */
     function getUI16BE() {
         $this->byteAlign();
         if (strlen($this->_data) < $this->_byte_offset + 2) {
@@ -147,6 +150,22 @@ class IO_Bit {
         }
         return $value - 0x10000; // 2-negative
     }
+    function getUI24BE() {
+        $this->byteAlign();
+        if (strlen($this->_data) < $this->_byte_offset + 3) {
+            $data_len = strlen($this->_data);
+            $offset = $this->_byte_offset;
+            throw new IO_Bit_Exception("getUI16BE: $data_len < $offset + 3");
+        }
+        $ret = unpack('n', substr($this->_data, $this->_byte_offset, 2));
+        $value = ord($this->_data[$this->_byte_offset + 2]);
+        $this->_byte_offset += 3;
+        return 0x100 * $ret[1] + $value;
+    }
+    function getSI24BE() {  // 2-negative
+        $value = $this->getUI24BE();
+        return ($value < 0x800000)? $value: $value - 0x1000000;
+    }
     function _getUI32BE() {
         $this->byteAlign();
         if (strlen($this->_data) < $this->_byte_offset + 4) {
@@ -159,7 +178,6 @@ class IO_Bit {
         $value = $ret[1];
         return $value;
     }
-
     function getUI32BE() {
         if (PHP_INT_SIZE > 4) {
             // 64bit PHP
@@ -196,8 +214,9 @@ class IO_Bit {
         }
         return $value;
     }
-
-
+    /*
+     * Little Endian
+     */
     function getUI16LE() {
         $this->byteAlign();
         if (strlen($this->_data) < $this->_byte_offset + 2) {
@@ -215,6 +234,22 @@ class IO_Bit {
             return $value;
         }
         return $value - 0x10000; // 2-negative
+    }
+    function getUI24LE() {
+        $this->byteAlign();
+        if (strlen($this->_data) < $this->_byte_offset + 3) {
+            $data_len = strlen($this->_data);
+            $offset = $this->_byte_offset;
+            throw new IO_Bit_Exception("getUI24LE: $data_len < $offset + 3");
+        }
+        $ret = unpack('v', substr($this->_data, $this->_byte_offset, 2));
+        $value = ord($this->_data[$this->_byte_offset + 2]);
+        $this->_byte_offset += 3;
+        return 0x10000 * $value + $ret[1];
+    }
+    function getSI24LE() {  // 2-negative
+        $value = $this->getUI24LE();
+        return ($value < 0x800000)? $value: $value - 0x1000000;
     }
     function _getUI32LE() {
         $this->byteAlign();
