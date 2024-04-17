@@ -61,7 +61,7 @@ class IO_Bit {
             $this->_bit_offset  = $bit_offset;
             
         } else {
-            $this->_byte_offse = $byte_offset + ($bit_offset >> 3);
+            $this->_byte_offset = $byte_offset + ($bit_offset >> 3);
             $this->_bit_offset = $bit_offset & 7;
         }
         return true;
