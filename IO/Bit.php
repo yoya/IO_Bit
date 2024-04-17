@@ -1,7 +1,7 @@
 <?php
 
   /*
-   * 2010/07/28- (c) yoya@awm.jp v3.1.0
+   * 2010/07/28- (c) yoya@awm.jp v3.1.1
    */
 
 require_once dirname(__FILE__).'/Bit/Exception.php';
