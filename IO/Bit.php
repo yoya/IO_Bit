@@ -50,20 +50,10 @@ class IO_Bit {
         return true;
     }
     function incrementOffset($byte_offset, $bit_offset) {
-        if ($bit_offset < 0) {
-            $byte_offset -= (-$bit_offset + 7) >> 3;
-            $bit_offset = ($bit_offset % 8) + 8;
-        }
-        $byte_offset += $this->_byte_offset;
-        $bit_offset += $this->_bit_offset;
-        if  ($bit_offset < 8) {
-            $this->_byte_offset = $byte_offset;
-            $this->_bit_offset  = $bit_offset;
-            
-        } else {
-            $this->_byte_offset = $byte_offset + ($bit_offset >> 3);
-            $this->_bit_offset = $bit_offset & 7;
-        }
+        $offset = ($this->_byte_offset + $byte_offset) * 8
+                + $this->_bit_offset + $bit_offset;
+        $this->_byte_offset = $offset >> 3;
+        $this->_bit_offset  = $offset & 7;
         return true;
     }
     function getOffset() {
