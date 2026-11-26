@@ -702,7 +702,7 @@ class IO_Bit {
         }
         if (($i % 0x10) != 0) {
             echo str_pad(' ', 3 * (0x10 - ($i % 0x10)));
-            if ($i < 8) {
+            if (($i % 0x10) < 8) {
                 echo ' ';
             }
             echo " ";
