@@ -145,7 +145,7 @@ class IO_Bit {
         if (strlen($this->_data) < $this->_byte_offset + 3) {
             $data_len = strlen($this->_data);
             $offset = $this->_byte_offset;
-            throw new IO_Bit_Exception("getUI16BE: $data_len < $offset + 3");
+            throw new IO_Bit_Exception("getUI24BE: $data_len < $offset + 3");
         }
         $ret = unpack('n', substr($this->_data, $this->_byte_offset, 2));
         $value = ord($this->_data[$this->_byte_offset + 2]);
