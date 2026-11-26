@@ -628,6 +628,9 @@ class IO_Bit {
      * need bits
      */
     function need_bits_unsigned($n) {
+        if ($n < 0) {
+            throw new IO_Bit_Exception("need_bits_unsigned: $n < 0");
+        }
         for ($i = 0 ; $n ; $i++) {
             $n >>= 1;
         }
