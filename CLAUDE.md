@@ -33,7 +33,7 @@ IO_SWF、IO_JPEG、IO_ISOBMFF など多くの IO_* ライブラリがこれに�
 6. GitHub リリース
    - タイトルは変更の要約にし、利用者が読んで分かる言葉で書く。
 7. Wiki
-   - Wiki は別リポジトリ (`git@github.com:yoya/IO_Bit.wiki.git`) で、Home ページ 1 枚に紹介・設計・利用方・機能 (メソッド一覧)・実装詳細 (既知の制限を含む) をまとめている。
+   - Wiki は別リポジトリ (`git@github.com:yoya/IO_Bit.wiki.git`)。Home (紹介・インストール・ページ一覧)、Design (設計・実装詳細・既知の制限)、Usage (コード例)、API (メソッド一覧) のページがある。
    - 今回の変更で古くなった記述が無いか見て、あれば直す。README と食い違わないようにする。
 8. 反映の確認
    - リリースが最新版として見えていること、Packagist (`yoya/io_bit`) に新しい版が反映されていることを確かめる。
