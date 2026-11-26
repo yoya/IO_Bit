@@ -380,6 +380,9 @@ class IO_Bit {
         return $value;
     }
     function getSIBitsLSB($width) {
+        if ($width <= 0) {
+            return 0;
+        }
         $value = $this->getUIBitsLSB($width);
         $msb = $value & (1 << ($width - 1));
         if ($msb) {
@@ -533,9 +536,9 @@ class IO_Bit {
         return true;
     }
     function putUIBitsLSB($value, $width) {
-        for ($i = 0 ;  $i < $width ; $i--) { // LSB(Bit) order
+        for ($i = 0 ;  $i < $width ; $i++) { // LSB(Bit) order
             $bit = ($value >> $i) & 1;
-            $ret = $this->putUIBit($bit);
+            $ret = $this->putUIBitLSB($bit);
             if ($ret !== true) {
                 return $ret;
             }
@@ -548,7 +551,7 @@ class IO_Bit {
             $bitmask = (2 * $msb) - 1;
             $value = (-$value  - 1) ^ $bitmask;
         }
-        return $this->putUIBits($value, $width);
+        return $this->putUIBitsLSB($value, $width);
     }
 
     /*
