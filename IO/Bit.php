@@ -470,7 +470,7 @@ class IO_Bit {
         }
         $data_len = strlen($this->_data);
         if ($data_len < $need_data_len) {
-            $this->_data .= str_pad(chr(0), $need_data_len - $data_len);
+            $this->_data .= str_repeat("\0", $need_data_len - $data_len);
         }
         return true;
     }
@@ -567,23 +567,27 @@ class IO_Bit {
             }
         }
         $data_len = strlen($data);
+        $this->_allocData($byte_offset + $data_len);
         for ($i = 0 ; $i < $data_len; $i++) {
             $this->_data[$byte_offset + $i] = $data[$i];
         }
         return true;
     }
     function setUI8($value, $byte_offset) {
+        $this->_allocData($byte_offset + 1);
         $this->_data[$byte_offset] = chr($value);
         return true;
     }
     function setUI16BE($value, $byte_offset) {
         $data = pack('n', $value);
+        $this->_allocData($byte_offset + 2);
         $this->_data[$byte_offset + 0] = $data[0];
         $this->_data[$byte_offset + 1] = $data[1];
         return true;
     }
     function setUI32BE($value, $byte_offset) {
         $data = pack('N', $value);
+        $this->_allocData($byte_offset + 4);
         $this->_data[$byte_offset + 0] = $data[0];
         $this->_data[$byte_offset + 1] = $data[1];
         $this->_data[$byte_offset + 2] = $data[2];
@@ -592,12 +596,14 @@ class IO_Bit {
     }
     function setUI16LE($value, $byte_offset) {
         $data = pack('v', $value);
+        $this->_allocData($byte_offset + 2);
         $this->_data[$byte_offset + 0] = $data[0];
         $this->_data[$byte_offset + 1] = $data[1];
         return true;
     }
     function setUI32LE($value, $byte_offset) {
         $data = pack('V', $value);
+        $this->_allocData($byte_offset + 4);
         $this->_data[$byte_offset + 0] = $data[0];
         $this->_data[$byte_offset + 1] = $data[1];
         $this->_data[$byte_offset + 2] = $data[2];
@@ -605,6 +611,7 @@ class IO_Bit {
         return true;
     }
     function setUIBit($bit, $byte_offset, $bit_offset) {
+        $this->_allocData($byte_offset + 1);
         $value = ord($this->_data[$byte_offset]);
         $mask = 1 << (7 - $bit_offset);  // MSB(Bit) first
         if ($bit > 0) {
