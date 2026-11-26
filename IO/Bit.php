@@ -606,7 +606,12 @@ class IO_Bit {
     }
     function setUIBit($bit, $byte_offset, $bit_offset) {
         $value = ord($this->_data[$byte_offset]);
-        $value |= 1 << (7 - $bit_offset);  // MSB(Bit) first
+        $mask = 1 << (7 - $bit_offset);  // MSB(Bit) first
+        if ($bit > 0) {
+            $value |= $mask;
+        } else {
+            $value &= ~$mask & 0xff;
+        }
         $this->_data[$byte_offset] = chr($value);
         return true;
     }
@@ -616,7 +621,7 @@ class IO_Bit {
                 $byte_offset ++;
                 $bit_offset -= 8;
             }
-            $bit = 1 & ($value >> (7 - $bit_offset)); // MSB(Bit) first
+            $bit = 1 & ($value >> ($width - 1 - $i)); // MSB(Bit) first
             $this->setUIBit($bit, $byte_offset, $bit_offset);
             $bit_offset++;
         }
