@@ -203,15 +203,13 @@ class IO_Bit {
         return $this->_getUI32BE();
     }
     function getUI64BE() {
-        $value = $this->getUI32LE();
+        $value = $this->getUI32BE();
         $value = $value * 0x100000000 + $this->getUI32BE();
         return $value;
     }
     function getSI64BE() {
-        $value = $this->getUI64LE();
-        if ($value >= 0x8000000000000000) {
-            $value = 0x7fffffffffffffff - $value;
-        }
+        $value = $this->getSI32BE(); // 2-negative
+        $value = $value * 0x100000000 + $this->getUI32BE();
         return $value;
     }
     /*
@@ -293,10 +291,8 @@ class IO_Bit {
         return $value;
     }
     function getSI64LE() {
-        $value = $this->getUI64LE();
-        if ($value >= 0x8000000000000000) {
-            $value = 0x7fffffffffffffff - $value;
-        }
+        $value = $this->getUI32LE();
+        $value = $value + 0x100000000 * $this->getSI32LE(); // 2-negative
         return $value;
     }
 
