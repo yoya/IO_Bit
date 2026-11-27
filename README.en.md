@@ -18,8 +18,11 @@ MIT License
 
 # Usage
 
+Use the Composer autoloader as shown below. For a manual installation on the PHP include path, use `require_once 'IO/Bit.php';`.
+
 ```php
-require_once 'IO/Bit.php';
+<?php
+require_once dirname(__FILE__) . '/vendor/autoload.php';
 
 // write
 $writer = new IO_Bit();
@@ -69,6 +72,8 @@ Reading and writing share the same position.
 - Reading past the end of the data throws `IO_Bit_Exception`.
 - Byte-level `put*` appends to the end of the data. Use `set*` to overwrite the middle of data that was read.
 - 64-bit reads return values within PHP's integer range. Unsigned values of 2^63 or more become floats and lose precision.
+
+- Extending the buffer with `set*` leaves the cursor in place. Move it to the new end before calling `output()` to include the extended bytes.
 
 # Test
 

@@ -20,8 +20,11 @@ MIT License
 
 # Usage
 
+Composer でインストールした場合は次のように読み込みます。手動配置の場合は `require_once 'IO/Bit.php';` を使います。
+
 ```php
-require_once 'IO/Bit.php';
+<?php
+require_once dirname(__FILE__) . '/vendor/autoload.php';
 
 // 書き込み
 $writer = new IO_Bit();
@@ -71,6 +74,8 @@ $reader->getSIBits(5);          // -2
 - 読み込みでデータが足りないときは `IO_Bit_Exception` を投げます。
 - バイト単位の `put*` はデータの末尾に追記します。読み込んだデータの途中を書き換えるには `set*` を使います。
 - 64bit の読み込みは PHP の整数の範囲で返します。符号無しで 2^63 以上の値は float になり、精度が落ちます。
+
+- `set*` でデータを延長してもカーソルは進みません。延長した部分を `output()` に含めるには、カーソルを新しい末尾に設定してください。
 
 # Test
 
